@@ -49,17 +49,6 @@ public class Movement : MonoBehaviour
     void Start()
     {
 
-        // wiskersWeights = new float[9];
-        // for (int index = 0; index < wiskersWeights.Length; index++)
-        // {
-        //     //wiskersWeights[index] = 1;
-        //     Random rg = new Random();
-        //     wiskersWeights[index] = (float)rg.NextDouble()*2f -1;
-        // }
-
-       
-        
-        
         wiskersDict = new Dictionary<char, Wisker>();
         UpdateWiskers();
         

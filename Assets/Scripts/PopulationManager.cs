@@ -79,16 +79,20 @@ public class PopulationManager : MonoBehaviour
 
         NormalizeAliveTimes();
 
-        List<Parents> selectedParents = TournamentSelection();
+        List<Parents> selectedParents = SelectionRoulette();
+        //List<Parents> selectedParents = TournamentSelection();
 
         TwoPointCrossover(selectedParents);
     }
-
+    
     void NormalizeAliveTimes()
     {
-        float totalAliveTime = 0;
-        foreach (Movement individual in population) totalAliveTime += individual.GetAliveTime;
-        foreach (Movement individual in population) individual.NormalizeTimeAlive(totalAliveTime);
+        float highestAliveTime = 0;
+        foreach (Movement individual in population) 
+            if (highestAliveTime < individual.GetAliveTime) highestAliveTime = individual.GetAliveTime;
+        foreach (Movement individual in population) individual.NormalizeTimeAlive(highestAliveTime);
+
+        population = population.OrderBy(o => o.GetAliveTime).ToList();
     }
 
     List<Parents> SelectionRoulette()
@@ -103,13 +107,13 @@ public class PopulationManager : MonoBehaviour
             Random rg = new Random();
             float newNumber = (float) rg.NextDouble();
 
-            float accumulativeProb = 0;
+            //float accumulativeProb = 0;
 
             foreach (Movement individual in population)
             {
-                accumulativeProb += individual.GetAliveTime;
+                //accumulativeProb += individual.GetAliveTime;
 
-                if (newNumber > accumulativeProb) continue;
+                if (newNumber >= individual.GetAliveTime) continue;
 
                 if (tempParents.firstParent == null)
                 {
@@ -244,8 +248,6 @@ public class PopulationManager : MonoBehaviour
         population = newGeneration;
         currentGeneration++;
     }
-    
-    
     float[] MutateChromossome(float[] originalChromossome)
     {
         Random rg = new Random();
